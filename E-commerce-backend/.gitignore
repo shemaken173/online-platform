@@ -1,0 +1,111 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### macOS ###
+.DS_Store
+*.swp
+*.swo
+*~
+
+### Windows ###
+Thumbs.db
+Desktop.ini
+
+### Environment Variables ###
+.env
+.env.local
+.env.*.local
+
+### Logs ###
+*.log
+logs/
+*.log.*
+
+### Database Files ###
+*.db
+*.sqlite
+*.sqlite3
+*.h2.db
+
+### Maven ###
+*.jar
+*.war
+.m2/
+
+### Gradle ###
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+### IDE Specific ###
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+### OS Generated Files ###
+.AppleDouble
+.LSOverride
+._*
+
+### Temporary Files ###
+*.tmp
+*.bak
+*.temp
+.#*
+
+### IDE Cache ###
+.idea/caches/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/tasks.xml
+
+### Application Properties ###
+application.properties
+application-dev.properties
+application-prod.properties
+application-test.properties
+application-*.properties
+
+### Coverage Reports ###
+coverage/
+.coverage
+.coverage.*
+htmlcov/
+
+### Compiled Sources ###
+src/main/java/**/generated/
+src/test/java/**/generated/
