@@ -19,7 +19,7 @@ A robust Spring Boot-based REST API for an online e-commerce platform that enabl
 - **Java 17+**
 - **Spring Boot 3.x**
 - **Spring Data JPA**
-- **MySQL/MariaDB**
+- **PostgreSQL 12+**
 - **Maven** (Build tool)
 - **Lombok** (Reduce boilerplate)
 - **Validation API** (Input validation)
@@ -78,7 +78,7 @@ E-commerce-backend/
 
 - Java 17 or higher
 - Maven 3.6.0 or higher (or use the included mvnw)
-- MySQL 5.7+ or MariaDB 10.4+
+- PostgreSQL 12 or higher
 
 ### Steps
 
@@ -92,10 +92,11 @@ E-commerce-backend/
    
    Edit `src/main/resources/application.properties`:
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
-   spring.datasource.username=your_db_user
+   spring.datasource.url=jdbc:postgresql://localhost:5432/e-commerce_db
+   spring.datasource.username=postgres
    spring.datasource.password=your_db_password
    spring.jpa.hibernate.ddl-auto=update
+   spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
    ```
 
 3. **Build the project**
@@ -251,15 +252,15 @@ server.port=8080
 server.servlet.context-path=/
 
 # Database Configuration
-spring.datasource.url=jdbc:mysql://localhost:3306/ecommerce_db
-spring.datasource.username=root
-spring.datasource.password=password
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:postgresql://localhost:5432/e-commerce_db
+spring.datasource.username=postgres
+spring.datasource.password=your_password
+spring.datasource.driver-class-name=org.postgresql.Driver
 
 # JPA/Hibernate Configuration
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=false
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.properties.hibernate.format_sql=true
 
 # Application Name
@@ -271,8 +272,12 @@ spring.application.name=E-Commerce Backend
 ### Create Database
 
 ```sql
-CREATE DATABASE ecommerce_db;
-USE ecommerce_db;
+CREATE DATABASE e-commerce_db;
+```
+
+Connect to the database:
+```bash
+psql -U postgres -d e-commerce_db
 ```
 
 The application will automatically create tables using Hibernate (set `spring.jpa.hibernate.ddl-auto=update`).
@@ -347,9 +352,11 @@ Recent commits:
 ## 🐛 Troubleshooting
 
 ### Database Connection Issues
-- Verify MySQL/MariaDB is running
+- Verify PostgreSQL is running
 - Check connection string in `application.properties`
-- Ensure database exists: `CREATE DATABASE ecommerce_db;`
+- Ensure database exists: `CREATE DATABASE "e-commerce_db";`
+- Verify PostgreSQL user and password are correct
+- Check if PostgreSQL is listening on port 5432
 
 ### Build Failures
 - Clear cache: `./mvnw clean`
