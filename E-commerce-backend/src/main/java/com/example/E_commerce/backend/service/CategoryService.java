@@ -50,14 +50,6 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    // Get category by name
-    public Optional<Category> getCategoryByName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Category name cannot be empty");
-        }
-        return categoryRepository.findByName(name);
-    }
-
     // Get all categories
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -112,13 +104,5 @@ public class CategoryService {
             return false;
         }
         return categoryRepository.existsById(id);
-    }
-
-    // Check if category exists by name
-    public boolean categoryExistsByName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            return false;
-        }
-        return categoryRepository.existsByName(name);
     }
 }

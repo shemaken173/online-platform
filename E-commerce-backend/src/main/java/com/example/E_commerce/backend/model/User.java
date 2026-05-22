@@ -31,8 +31,4 @@ public class User {
 
     @Column(nullable = false)
     private Boolean isActive;
-
-    @Version
-    @Column(name = "version")
-    private Long version;
 }

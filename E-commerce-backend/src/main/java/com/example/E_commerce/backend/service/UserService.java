@@ -92,7 +92,7 @@ public class UserService {
             throw new IllegalArgumentException("Display name must be at least 2 characters long");
         }
 
-        if (displayName.length() > 100) {
+        if (displayName.length() > 50) {
             throw new IllegalArgumentException("Display name cannot exceed 100 characters");
         }
     }
@@ -102,7 +102,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    // Get all active users (default behavior)
+    // Get all active users
     public List<User> getAllUsers() {
         return userRepository.findByIsActiveTrue();
     }

@@ -49,23 +49,6 @@ public class CategoryController {
     }
 
     /**
-     * Get category by name
-     * GET /api/categories/name/{name}
-     */
-    @GetMapping("/name/{name}")
-    public ResponseEntity<?> getCategoryByName(@PathVariable String name) {
-        try {
-            Optional<Category> category = categoryService.getCategoryByName(name);
-            if (category.isPresent()) {
-                return ResponseEntity.ok(category.get());
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category not found");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
-        }
-    }
-
-    /**
      * Get all categories
      * GET /api/categories
      */
@@ -114,16 +97,6 @@ public class CategoryController {
     @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> categoryExists(@PathVariable Long id) {
         boolean exists = categoryService.categoryExists(id);
-        return ResponseEntity.ok(exists);
-    }
-
-    /**
-     * Check if category exists by name
-     * GET /api/categories/exists/name/{name}
-     */
-    @GetMapping("/exists/name/{name}")
-    public ResponseEntity<Boolean> categoryExistsByName(@PathVariable String name) {
-        boolean exists = categoryService.categoryExistsByName(name);
         return ResponseEntity.ok(exists);
     }
 }
