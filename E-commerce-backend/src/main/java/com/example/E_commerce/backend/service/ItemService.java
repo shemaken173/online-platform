@@ -8,6 +8,10 @@ import com.example.E_commerce.backend.model.ContactMethod;
 import com.example.E_commerce.backend.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import com.example.E_commerce.backend.repository.ItemSpecification;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,10 +36,7 @@ public class ItemService {
         validateContactMethod(item.getContactMethod());
         validateCondition(item.getCondition());
 
-        // Check if item title already exists
-        if (itemRepository.existsByTitle(item.getTitle())) {
-            throw new IllegalArgumentException("Item with title '" + item.getTitle() + "' already exists");
-        }
+
 
         // Set default values
         item.setCreatedAt(LocalDateTime.now());
@@ -137,8 +138,8 @@ public class ItemService {
         return itemRepository.findById(id);
     }
 
-    // Get item by title
-    public Optional<Item> getItemByTitle(String title) {
+    // Get items by title
+    public List<Item> getItemByTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Item title cannot be empty");
         }
@@ -148,6 +149,25 @@ public class ItemService {
     // Get all items
     public List<Item> getAllItems() {
         return itemRepository.findAll();
+    }
+
+    // Get paginated items with dynamic filters
+    public Page<Item> getItems(Long categoryId, Long statusId, String search, Pageable pageable) {
+        Specification<Item> spec = Specification.where((Specification<Item>) null);
+
+        if (categoryId != null) {
+            spec = spec.and(ItemSpecification.hasCategory(categoryId));
+        }
+
+        if (statusId != null) {
+            spec = spec.and(ItemSpecification.hasStatus(statusId));
+        }
+
+        if (search != null && !search.trim().isEmpty()) {
+            spec = spec.and(ItemSpecification.titleOrDescriptionContains(search));
+        }
+
+        return itemRepository.findAll(spec, pageable);
     }
 
     // Update item
@@ -166,9 +186,6 @@ public class ItemService {
         // Validate and update item title if provided and different
         if (itemDetails.getTitle() != null && !itemDetails.getTitle().isEmpty() && !itemDetails.getTitle().equals(item.getTitle())) {
             validateTitle(itemDetails.getTitle());
-            if (itemRepository.existsByTitle(itemDetails.getTitle())) {
-                throw new IllegalArgumentException("Item with title '" + itemDetails.getTitle() + "' already exists");
-            }
             item.setTitle(itemDetails.getTitle());
         }
 
@@ -201,13 +218,13 @@ public class ItemService {
         }
 
         // Update image URL if provided
-        if (itemDetails.getImageUrl() != null) {
-            item.setImageUrl(itemDetails.getImageUrl());
+        if (itemDetails.getImageUrls() != null) {
+            item.setImageUrls(itemDetails.getImageUrls());
         }
 
         // Update expire at if provided
-        if (itemDetails.getExpireAt() != null) {
-            item.setExpireAt(itemDetails.getExpireAt());
+        if (itemDetails.getExpiresAt() != null) {
+            item.setExpiresAt(itemDetails.getExpiresAt());
         }
 
         // Update status if provided

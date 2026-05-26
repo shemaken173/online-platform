@@ -5,13 +5,14 @@ import com.example.E_commerce.backend.model.User;
 import com.example.E_commerce.backend.model.Category;
 import com.example.E_commerce.backend.model.ListingStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, JpaSpecificationExecutor<Item> {
 
     // Find items by user
     List<Item> findByUser(User user);
@@ -22,8 +23,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     // Find items by status
     List<Item> findByStatus(ListingStatus status);
 
-    // Find item by title
-    Optional<Item> findByTitle(String title);
+    // Find items by title
+    List<Item> findByTitle(String title);
 
     // Check if item exists by title
     boolean existsByTitle(String title);

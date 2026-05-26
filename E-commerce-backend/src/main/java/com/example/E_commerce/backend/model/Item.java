@@ -34,7 +34,7 @@ public class Item {
     @JoinColumn(name = "contact_method_id", nullable = false)
     private ContactMethod contactMethod;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -52,8 +52,8 @@ public class Item {
     @Column(columnDefinition = "TEXT")
     private String pickupLocation;
 
-    @Column(columnDefinition = "TEXT")
-    private String imageUrl;
+    @Column(name = "image_urls", columnDefinition = "TEXT")
+    private String imageUrls;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -61,6 +61,6 @@ public class Item {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "expire_at")
-    private LocalDateTime expireAt;
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt;
 }

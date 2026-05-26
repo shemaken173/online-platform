@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,29 +53,42 @@ public class ItemController {
     }
 
     /**
-     * Get item by title
+     * Get items by title
      * GET /api/items/title/{title}
      */
     @GetMapping("/title/{title}")
     public ResponseEntity<?> getItemByTitle(@PathVariable String title) {
         try {
-            Optional<Item> item = itemService.getItemByTitle(title);
-            if (item.isPresent()) {
-                return ResponseEntity.ok(item.get());
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+            List<Item> items = itemService.getItemByTitle(title);
+            return ResponseEntity.ok(items);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
         }
     }
 
     /**
-     * Get all items
+     * Get all items (paginated and filtered)
      * GET /api/items
      */
     @GetMapping
-    public ResponseEntity<List<Item>> getAllItems() {
-        List<Item> items = itemService.getAllItems();
+    public ResponseEntity<Page<Item>> getAllItems(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long statusId,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "createdAt,desc") String sort
+    ) {
+        // Parse sorting direction and property
+        String[] sortParams = sort.split(",");
+        String sortProp = sortParams[0];
+        Sort.Direction sortDir = Sort.Direction.DESC;
+        if (sortParams.length > 1 && "asc".equalsIgnoreCase(sortParams[1])) {
+            sortDir = Sort.Direction.ASC;
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDir, sortProp));
+        Page<Item> items = itemService.getItems(categoryId, statusId, search, pageable);
         return ResponseEntity.ok(items);
     }
 
